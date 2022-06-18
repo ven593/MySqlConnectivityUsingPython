@@ -1,0 +1,181 @@
+mysqlConnectivity with the python
+=====================================
+in pyCharm , first add mysql-connector
+steps: >> click on FILE
+       >> SETTINGS
+       >> PROJECT>>>>>>>PROJECT_INTERPRETER
+		>> CLICK ON + , THEN SEARCH FOR mysql-connector then add  the package
+	>> refresh
+step 2>> in the terminal , 
+                   execute the command : pip install mysql-connector-python
+
+
+=================================================================
+how to check ?? whether the connection is correct or not?
+================================================================
+##code##
+import mysql.connector
+mydb = mysql.connector.connect(host="127.0.0.1" ,  database = "quastech" , user = "root" , passwd = "root")
+print(mydb)
+
+
+##output##
+<mysql.connector.connection_cext.CMySQLConnection object at 0x00000281610A6E30>
+=====================================================================================================
+
+===========================CREATING A DATABASE====================
+
+SYNTAX:
+-------
+REF_VAR = mydb.cursor()
+REF_VAR.EXECUTE(SQL QUERY)
+
+#############################EXAMPLE###################################
+import mysql.connector
+mydb = mysql.connector.connect(host="127.0.0.1" ,  database = "quastech" , user = "root" , passwd = "root")
+
+mycursor = mydb.cursor()
+mycursor.execute("create database sona")
+=========================SHOW DATABASES=========================================
+############################EXAMPLE##################
+import mysql.connector
+mydb = mysql.connector.connect(host="127.0.0.1" ,  database = "quastech" , user = "root" , passwd = "root")
+
+mycursor = mydb.cursor()
+mycursor.execute("SHOW databases")
+
+for db in mycursor:
+    print(db)
+
+$$$$$$$$$$$$$$$OUTPUT$$$$$$$$$$$$$$$
+C:\Python310\python.exe C:/Users/trycity/PycharmProjects/pythonProject1/P1.py
+('aman',)
+('information_schema',)
+('mysql',)
+('performance_schema',)
+('quastech',)
+('sakila',)
+('sona',)
+('sys',)
+('venkatesh',)
+('world',)
+('yashika',)
+
+Process finished with exit code 0
+==========================CREATE TABLE=========================================
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost", database ="sona", user="root" , passwd="root")
+mycursor = mydb.cursor()
+print(mycursor.execute("CREATE TABLE VENKATESH(AGE INT, NAME VARCHAR(20))"))
+
+
+===============SHOW TABLES====================
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost", database ="sona", user="root" , passwd="root")
+mycursor = mydb.cursor()
+print(mycursor.execute("SHOW TABLES"))
+for table in mycursor:
+    print(table)
+$$$$$$$$$$$$$$$$$$$$$$$$$$OUTPUT$$$$$$$$$$$$$$$$$$$$
+C:\Python310\python.exe C:/Users/trycity/PycharmProjects/pythonProject1/mysql-tb-create.py
+None
+('sona',)
+('venkatesh',)
+
+Process finished with exit code 0
+================================================================================
+===========================INSERT DATA INTO THE TABLE==========================
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost",database="sona",user="root",passwd="root")
+
+sqlform = "insert into sona(age,name) values(%s,%s)"
+data = [(16,"abc"),(17,"xyz"),(18,"pqr")]
+mycursor = mydb.cursor()
+mycursor.executemany(sqlform,data)
+mydb.commit()
+=============================$$OUTPUT$$====================
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost",database="sona",user="root",passwd="root")
+mycursor = mydb.cursor()
+mycursor.execute("select* from sona")
+for i in mycursor:
+    print(i)
+$$$$$$$$$$$$$$$$$$$$$$$output$$$$$$$$$$$$$$$$$$$$$
+C:\Python310\python.exe C:/Users/trycity/PycharmProjects/pythonProject1/mysql-insert-data-to-tb.py
+(16, 'abc')
+(17, 'xyz')
+(18, 'pqr')
+
+Process finished with exit code 0
+==================================================================================
+==========================FETCHING DATA FROM THE TABLE==========================
+-------------------FETCHING A SINGLE CELL USING FETCHONE()----------------------
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost",database="sona",user="root",passwd="root")
+mycursor = mydb.cursor()
+mycursor.execute("select name from sona")
+result = mycursor.fetchone()
+for i in result:
+    print(i)
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$OUTPUT$$$$$$$$$$$$$$$$$$$$$$$$$
+C:\Python310\python.exe C:/Users/trycity/PycharmProjects/pythonProject1/mysql-fetch-data-from-column.py
+abc
+
+Process finished with exit code 0
+-----------------------FETCHING A MULTIPLE CELLS USING FETCHALL()---------------------
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost",database="sona",user="root",passwd="root")
+mycursor = mydb.cursor()
+mycursor.execute("select name from sona")
+result = mycursor.fetchall()
+for i in result:
+    print(i)
+$$$$$$$$$$$$$$$$$$$$$OUTPUT$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+C:\Python310\python.exe C:/Users/trycity/PycharmProjects/pythonProject1/mysql-fetch-data-from-column.py
+('abc',)
+('xyz',)
+('pqr',)
+
+Process finished with exit code 0
+----------------------------------FETCHING ENTIRE TABLE-------------------------
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost",database="sona",user="root",passwd="root")
+mycursor = mydb.cursor()
+mycursor.execute("select * from sona")
+result = mycursor.fetchall()
+for i in result:
+    print(i)
+$$$$$$$$$$$$$$$$$$$$$$$$$$$OUTPUT$$$$$$$$$$$$$$$$$$$$$$
+C:\Python310\python.exe C:/Users/trycity/PycharmProjects/pythonProject1/mysql-fetch-data-from-column.py
+(16, 'abc')
+(17, 'xyz')
+(18, 'pqr')
+
+Process finished with exit code 0
+==========================================================================================
+==============================UPDATING A SINGLE ROW==============================================
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost",database="sona",user="root",passwd="root")
+mycursor = mydb.cursor()
+update = "update sona set age=24 where name='sona'"
+mycursor.execute(update)
+mydb.commit()
+=============================UPDATING ALL ROWS======================================================
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost",database="sona",user="root",passwd="root")
+mycursor = mydb.cursor()
+update = "update sona set age=48"
+mycursor.execute(update)
+mydb.commit()
+==================================================================================
+=========================DELETE FROM TABLE=================================
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost",database="sona",user="root",passwd="root")
+mycursor = mydb.cursor()
+delete = "delete from sona where age=48"
+mycursor.execute(delete)
+mydb.commit()
+==========================================================================
+
+
